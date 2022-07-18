@@ -1,0 +1,16 @@
+[package]
+name = "df-rust"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bytestream = "0.4.1"
+bytes = "1.1.0"
+prost = "0.9.0"
+ascii = "1.0.0"
+tonic = "0.6.1"
+
+[build-dependencies]
+prost-build = "0.9.0"
