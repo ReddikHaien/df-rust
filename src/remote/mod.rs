@@ -1,4 +1,4 @@
-use std::{net::TcpStream, io::{Write, Read}, str::FromStr};
+use std::{net::{TcpStream, ToSocketAddrs}, io::{Write, Read}, str::FromStr};
 
 use ascii::AsciiString;
 use bytestream::{StreamWriter, ByteOrder, StreamReader};
@@ -47,7 +47,9 @@ pub struct RemoteClient{
 }
 
 impl RemoteClient{
-    pub fn new(url: &str) -> Self{
+    pub fn new<A>(url: A) -> Self
+        where A: ToSocketAddrs
+    {
         let mut connection = match TcpStream::connect(url){
             Ok(x) => x,
             Err(e) => panic!("failed to connect  to remote :{}",e),
@@ -63,7 +65,7 @@ impl RemoteClient{
             panic!("Invalid magic: {}",&std::str::from_utf8(&buffer[..8]).unwrap())
         }
 
-        println!("Successfully connected to {}!",url);
+        println!("Successfully connected to df!");
 
         Self{
             connection

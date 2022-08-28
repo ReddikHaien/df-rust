@@ -1,3 +1,5 @@
+use std::net::ToSocketAddrs;
+
 use ascii::AsciiString;
 use prost::Message;
 
@@ -40,8 +42,13 @@ pub struct RemoteFortressReader{
 }
 
 impl RemoteFortressReader{
-    pub fn new() -> Self{
-        let mut client = RemoteClient::new("127.0.0.1:5000");
+    pub fn new<A>(url: Option<A>) -> Self
+        where A: ToSocketAddrs
+    {
+        let mut client = match url {
+            Some(url) => RemoteClient::new(url),
+            None => RemoteClient::new("127.0.0.1:5000"),
+        };
         let get_material_list_id        = client.bind_method("GetMaterialList", "dfproto.EmptyMessage", "RemoteFortressReader.MaterialList", Some("RemoteFortressReader"));
         let get_world_map_id            = client.bind_method("GetWorldMap", "dfproto.EmptyMessage", "RemoteFortressReader.WorldMap", Some("RemoteFortressReader"));
         let get_region_maps_id          = client.bind_method("GetRegionMaps", "dfproto.EmptyMessage", "RemoteFortressReader.RegionMaps", Some("RemoteFortressReader"));
